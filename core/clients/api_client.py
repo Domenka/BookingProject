@@ -85,8 +85,8 @@ class ApiClient():
 
     def get_booking_by_id(self, booking_id):
         with allure.step("Get booking by id"):
-            url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT}"
-            response = self.session.get(url, params=booking_id)
+            url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT/booking_id}"
+            response = self.session.get(url)
             response.raise_for_status()
 
         with allure.step("Assert status code"):
@@ -95,4 +95,6 @@ class ApiClient():
         with allure.step("Assert format and content from response"):
             assert isinstance(response.json(), dict)
             jsonschema.validate(response.json(), BOOKING_SCHEMA)
+
+            return response.json()
 
