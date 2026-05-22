@@ -140,7 +140,7 @@ class ApiClient():
     def partial_update_booking(self, booking_id, booking_data):
         with allure.step("Partial update booking by id"):
             url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT}/{booking_id}"
-            response = self.session.put(url, json=booking_data, auth=HTTPBasicAuth(Creds.USERNAME, Creds.PASSWORD)) #удивительно, но в документации действительно указан put-метод
+            response = self.session.patch(url, json=booking_data, auth=HTTPBasicAuth(Creds.USERNAME, Creds.PASSWORD))
             response.raise_for_status()
             with allure.step("Assert status code"):
                 assert response.status_code == 200, f"Expected status code is 200, but got {response.status_code}"
