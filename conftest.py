@@ -1,0 +1,39 @@
+from core.clients.api_client import ApiClient
+import pytest
+from datetime import datetime, timedelta
+from faker import Faker
+
+@pytest.fixture(scope="session")
+def api_client():
+    client = ApiClient()
+    client.auth()
+    return client
+
+@pytest.fixture
+def booking_dates():
+    today = datetime.today()
+    checkin_date = today + timedelta(days=10)
+    checkout_date = checkin_date + timedelta(days=5)
+
+    return {
+        "checkin_date": checkin_date.strftime("%Y-%m-%d"),
+        "checkout_date": checkout_date.strftime("%Y-%m-%d")
+    }
+
+@pytest.fixture
+def generate_booking_data(booking_dates):
+    faker = Faker()
+    first_name = faker.first_name()
+    last_name = faker.last_name()
+    total_price = faker.random_number(digits=3)
+    depositpaid = faker.boolean()
+    additionalneeds = faker.sentence()
+
+    data = {
+        "first_name" : first_name,
+        "last_name" : last_name,
+        "total_price" : total_price,
+        "depositpaid" : depositpaid,
+        "additionalneeds" : additionalneeds
+    }
+    return data
