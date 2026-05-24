@@ -16,25 +16,25 @@ def booking_dates():
     checkout_date = checkin_date + timedelta(days=5)
 
     return {
-        "checkin_date": checkin_date.strftime("%Y-%m-%d"),
-        "checkout_date": checkout_date.strftime("%Y-%m-%d")
+        "checkin": checkin_date.strftime("%Y-%m-%d"),
+        "checkout": checkout_date.strftime("%Y-%m-%d")
     }
 
 @pytest.fixture
 def generate_booking_data(booking_dates):
     faker = Faker()
-    first_name = faker.first_name()
-    last_name = faker.last_name()
-    total_price = faker.random_number(digits=3)
+    firstname = faker.first_name()
+    lastname = faker.last_name()
+    totalprice = faker.random_number(digits=3)
     depositpaid = faker.boolean()
     additionalneeds = faker.sentence()
 
     data = {
-        "first_name" : first_name,
-        "last_name" : last_name,
-        "total_price" : total_price,
+        "firstname" : firstname,
+        "lastname" : lastname,
+        "totalprice" : totalprice,
         "depositpaid" : depositpaid,
-        "booking_dates" : booking_dates,
+        "bookingdates" : booking_dates,
         "additionalneeds" : additionalneeds
     }
     return data
