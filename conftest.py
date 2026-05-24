@@ -34,6 +34,7 @@ def generate_booking_data(booking_dates):
         "last_name" : last_name,
         "total_price" : total_price,
         "depositpaid" : depositpaid,
+        "booking_dates" : booking_dates,
         "additionalneeds" : additionalneeds
     }
     return data
