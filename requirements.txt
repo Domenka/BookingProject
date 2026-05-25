@@ -16,3 +16,4 @@ requests==2.34.0
 rpds-py==0.30.0
 urllib3==2.7.0
 python-dotenv==1.2.2
+faker==25.9.2
