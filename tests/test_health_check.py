@@ -1,0 +1,60 @@
+import allure
+import requests
+import pytest
+
+@allure.feature("Test ping")
+@allure.story("Test connection")
+def test_ping(api_client):
+    status_code = api_client.ping()
+    assert status_code == 201, f"Expected status code is 201, but got {status_code}"
+
+@allure.feature("Test ping")
+@allure.story("Test server unavailablity")
+def test_server_unavailable(api_client, mocker):
+    mocker.patch.object(api_client.session, "get", side_effect=Exception("Server is unavailable"))
+    with pytest.raises(Exception, match="Server is unavailable"):
+        api_client.ping()
+
+@allure.feature("Test ping")
+@allure.story("Test wrong HTTP method")
+def test_wrong_http_method(api_client, mocker):
+    mock_response = mocker.Mock()
+    mock_response.status_code = 405
+    mocker.patch.object(api_client.session, "get", return_value=mock_response)
+    with pytest.raises(AssertionError, match="Expected status code is 201, but got 405"):
+        api_client.ping()
+
+@allure.feature("Test ping")
+@allure.story("Test internal server error")
+def test_internal_server_error(api_client, mocker):
+    mock_response = mocker.Mock()
+    mock_response.status_code = 500
+    mocker.patch.object(api_client.session, "get", return_value=mock_response)
+    with pytest.raises(AssertionError, match="Expected status code is 201, but got 500"):
+        api_client.ping()
+
+@allure.feature("Test ping")
+@allure.story("Test wrong URL")
+def test_wrong_url(api_client, mocker):
+    mock_response = mocker.Mock()
+    mock_response.status_code = 404
+    mocker.patch.object(api_client.session, "get", return_value=mock_response)
+    with pytest.raises(AssertionError, match="Expected status code is 201, but got 404"):
+        api_client.ping()
+
+@allure.feature("Test ping")
+@allure.story("Test connection with diff success code")
+def test_connection_with_diff_success_code(api_client, mocker):
+    mock_response = mocker.Mock()
+    mock_response.status_code = 200
+    mocker.patch.object(api_client.session, "get", return_value=mock_response)
+    with pytest.raises(AssertionError, match="Expected status code is 201, but got 200"):
+        api_client.ping()
+
+@allure.feature("Test ping")
+@allure.story("Test timeout")
+def test_timeout(api_client, mocker):
+    mocker.patch.object(api_client.session, "get", side_effect=requests.exceptions.Timeout)
+    with pytest.raises(requests.Timeout):
+        api_client.ping()
+
