@@ -106,10 +106,8 @@ class ApiClient():
         with allure.step("Create booking"):
             url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT.value}"
             response = self.session.post(url, json=booking_data)
-            return response #вовзращаю респонс, чтобы валидировать статус код - иначе падало с ошибкой, что у json нет статус кода
-
-
-
+            response.raise_for_status()
+            return response  # вовзращаю респонс, чтобы валидировать статус код - иначе падало с ошибкой, что у json нет статус кода
 
     def get_booking_ids(self, params=None):
         with allure.step("Getting object with booking"):
