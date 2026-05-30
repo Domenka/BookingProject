@@ -28,7 +28,8 @@ class ApiClient():
         self.base_url = self.get_base_url(environment)
         self.session = requests.Session()
         self.session.headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Accept": "application/json"
         }
 
     def get_base_url(self, environment: Environment) -> str:
@@ -106,12 +107,7 @@ class ApiClient():
             url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT.value}"
             response = self.session.post(url, json=booking_data)
             response.raise_for_status()
-            with allure.step("Assert status code"):
-                assert response.status_code == 200, f"Expected status code is 200, but got {response.status_code}"
-                with allure.step("Assert format and content from response"):
-                    assert isinstance(response.json(), dict)
-                    jsonschema.validate(response.json(), BOOKING_SCHEMA)
-            return response.json()
+            return response  # вовзращаю респонс, чтобы валидировать статус код - иначе падало с ошибкой, что у json нет статус кода
 
     def get_booking_ids(self, params=None):
         with allure.step("Getting object with booking"):
